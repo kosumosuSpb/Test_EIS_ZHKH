@@ -1,4 +1,4 @@
 /wenv/
 /temp/
 /.idea/
-/db.sqlite
+**/db.sqlite

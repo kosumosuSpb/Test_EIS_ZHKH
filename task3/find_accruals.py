@@ -1,5 +1,5 @@
 from pony.orm import *
-from models import Accrual, Payment
+from .models import Accrual, Payment
 
 
 @db_session

@@ -3,7 +3,7 @@ from pony.orm import *
 from random import randint
 from typing import List
 #
-from models import Accrual, Payment
+from .models import Accrual, Payment
 
 
 def date_gen(spread=365) -> date:
