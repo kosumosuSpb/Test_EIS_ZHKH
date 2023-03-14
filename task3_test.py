@@ -1,7 +1,7 @@
 from pony.orm import db_session
-from models import Accrual, Payment
-from gen_data import create_accruals, create_payments
-from find_accruals import find_accruals
+from task3.models import Accrual, Payment
+from task3.gen_data import create_accruals, create_payments
+from task3.find_accruals import find_accruals
 
 if __name__ == '__main__':
     print('Create entities in DB...')
