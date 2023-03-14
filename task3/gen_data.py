@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from pony.orm import *
 from random import randint
 from typing import List
@@ -8,7 +8,7 @@ from models import Accrual, Payment
 
 def date_gen(spread=365) -> date:
     """
-    :param spread: разброс по месяцам
+    :param spread: разброс по дням
     :return: список дат
     """
     return date.today() - timedelta(days=randint(1, spread))
