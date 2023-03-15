@@ -12,7 +12,7 @@
 Дано: date1 = "2020-01-15", date2 = "2019-12-31"
 Результат: 15
 """
-
+import datetime
 import unittest
 
 
@@ -97,19 +97,23 @@ class Date:
             days_years += 366 if cls.is_leap(year) else 365
 
         # сколько прошло дней от начала года до стартовой даты
-        start_year_days = 0
-        for month in range(1, start_date.month):
-            start_year_days += 29 if cls.is_leap(start_date.year) and month == 2 else cls._DAYS_COUNT[month]
-        start_year_days += start_date.day
+        start_year_days = cls._days_from_year_start(start_date)
 
         # сколько дней прошло от начала года в финишной дате до дня финишной даты
-        finish_year_days = 0
-        for month in range(1, finish_date.month):
-            finish_year_days += 29 if cls.is_leap(finish_date.year) and month == 2 else cls._DAYS_COUNT[month]
-        finish_year_days += finish_date.day
+        finish_year_days = cls._days_from_year_start(finish_date)
 
         # считаем разницу между днями
         return finish_year_days + days_years - start_year_days
+
+    @classmethod
+    def _days_from_year_start(cls, date) -> int:
+        """Возвращает количество дней с начала года"""
+        days = 0
+        for month in range(1, date.month):
+            days += 29 if cls.is_leap(date.year) and month == 2 else cls._DAYS_COUNT[month]
+        days += date.day
+
+        return days
 
     def _day_increment(self):
         if self.day < self.days(self.month, self.year):
