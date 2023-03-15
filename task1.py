@@ -56,8 +56,8 @@ class Date:
         assert 0 < day <= days, f'Day must be in range 1 - {days} or 1 - 31/30 in other months'
 
     @classmethod
-    def days_diff(cls, date1: str, date2: str) -> int:
-        """Возвращает количество дней в int между введёнными датами (даты в формате YYYY-MM-DD)"""
+    def days_diff_increment(cls, date1: str, date2: str) -> int:
+        """Возвращает количество дней в int между введёнными датами (даты в формате YYYY-MM-DD) методом инкремента"""
         date1 = cls(date1)
         date2 = cls(date2)
 
@@ -74,6 +74,42 @@ class Date:
             _day_counter += 1
 
         return _day_counter
+
+    @classmethod
+    def days_diff(cls, date1: str, date2: str) -> int:
+        """
+        Возвращает количество дней в int между введёнными датами (даты в формате YYYY-MM-DD)
+        методом подсчёта разницы количества дней от самой ранней даты
+        """
+        date1 = cls(date1)
+        date2 = cls(date2)
+
+        if date1 > date2:
+            start_date, finish_date = date2, date1
+        elif date2 > date1:
+            start_date, finish_date = date1, date2
+        else:
+            return 0
+
+        # ищем количество дней между годами
+        days_years = 0
+        for year in range(start_date.year, finish_date.year):
+            days_years += 366 if cls.is_leap(year) else 365
+
+        # сколько прошло дней от начала года до стартовой даты
+        start_year_days = 0
+        for month in range(1, start_date.month):
+            start_year_days += 29 if cls.is_leap(start_date.year) and month == 2 else cls._DAYS_COUNT[month]
+        start_year_days += start_date.day
+
+        # сколько дней прошло от начала года в финишной дате до дня финишной даты
+        finish_year_days = 0
+        for month in range(1, finish_date.month):
+            finish_year_days += 29 if cls.is_leap(finish_date.year) and month == 2 else cls._DAYS_COUNT[month]
+        finish_year_days += finish_date.day
+
+        # считаем разницу между днями
+        return finish_year_days + days_years - start_year_days
 
     def _day_increment(self):
         if self.day < self.days(self.month, self.year):
@@ -124,11 +160,19 @@ class TestDate(unittest.TestCase):
     expected1 = 1
     expected2 = 15
 
-    def test_date1(self):
+    def test_date1_increment_method(self):
+        result = Date.days_diff_increment(self.d1, self.d2)
+        self.assertEqual(self.expected1, result)
+
+    def test_date2_increment_method(self):
+        result = Date.days_diff_increment(self.d3, self.d4)
+        self.assertEqual(self.expected2, result)
+
+    def test_date1_reference_year_method(self):
         result = Date.days_diff(self.d1, self.d2)
         self.assertEqual(self.expected1, result)
 
-    def test_date2(self):
+    def test_date2_reference_year_method(self):
         result = Date.days_diff(self.d3, self.d4)
         self.assertEqual(self.expected2, result)
 
