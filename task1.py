@@ -12,7 +12,6 @@
 Дано: date1 = "2020-01-15", date2 = "2019-12-31"
 Результат: 15
 """
-import datetime
 import unittest
 
 
